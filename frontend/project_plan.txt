@@ -1,0 +1,8 @@
+React frontend placeholder.
+Pages:
+- Login
+- Dashboard
+- Disease Prediction
+- Skin Detection
+- Report Analyzer
+- Chatbot

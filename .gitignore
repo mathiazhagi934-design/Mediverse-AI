@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML Models / Data
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+datasets/
+*.csv
+*.parquet
+
+# Logs
+*.log
+logs/
+
+# Next.js
+.next/
+out/
+
+# Tesseract training data (keep only trained data)
+*.traineddata

@@ -1,0 +1,17 @@
+TEAM MEMBER 1
+- UI/UX
+- React Frontend
+- Dashboard
+- Testing
+
+TEAM MEMBER 2
+- FastAPI Backend
+- ML Models
+- Database
+- OCR
+
+BOTH
+- Integration
+- Documentation
+- PPT
+- Final Demo
