@@ -2,12 +2,12 @@ import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 const buttonVariants = {
-  primary: 'bg-primary-600 hover:bg-primary-700 text-white',
-  secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white',
-  outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20',
-  ghost: 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800',
-  danger: 'bg-red-600 hover:bg-red-700 text-white',
-  success: 'bg-green-600 hover:bg-green-700 text-white',
+  primary: 'bg-primary-600 hover:bg-primary-500 text-white',
+  secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-slateink-800 dark:hover:bg-slateink-700 dark:text-white dark:border dark:border-slateink-600',
+  outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-500 dark:text-primary-400 dark:hover:bg-primary-500/15',
+  ghost: 'text-gray-600 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slateink-800',
+  danger: 'bg-red-600 hover:bg-red-500 text-white',
+  success: 'bg-green-600 hover:bg-green-500 text-white',
 };
 
 const sizeVariants = {

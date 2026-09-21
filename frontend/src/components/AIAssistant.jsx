@@ -154,13 +154,13 @@ How can I help you today?`,
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 300 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="fixed bottom-20 right-4 w-full max-w-md sm:max-w-lg lg:max-w-xl h-[60vh] max-h-[70vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-50 overflow-hidden"
+      className="fixed bottom-20 right-4 w-full max-w-md sm:max-w-lg lg:max-w-xl h-[60vh] max-h-[70vh] bg-white dark:bg-slateink-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slateink-700 flex flex-col z-50 overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-label="AI Health Assistant"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slateink-700 bg-gray-50 dark:bg-slateink-950/60">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-purple-500 rounded-xl flex items-center justify-center">
             <Bot className="w-5 h-5 text-white" />
@@ -174,7 +174,7 @@ How can I help you today?`,
           onClick={onClose}
           whileHover={{ scale: 1.1, rotate: 90 }}
           whileTap={{ scale: 0.9 }}
-          className="p-2 rounded-lg text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+          className="p-2 rounded-lg text-gray-500 hover:bg-gray-200 dark:hover:bg-slateink-800 transition-colors"
           aria-label="Close assistant"
         >
           <X className="w-5 h-5" />
@@ -207,7 +207,7 @@ How can I help you today?`,
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-left"
+                  className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slateink-800 rounded-xl hover:bg-gray-200 dark:hover:bg-slateink-700 transition-colors text-left"
                 >
                   {prompt}
                 </motion.button>
@@ -236,7 +236,7 @@ How can I help you today?`,
                 'inline-block px-4 py-2 rounded-2xl text-sm leading-relaxed',
                 message.role === 'user'
                   ? 'bg-primary-600 text-white rounded-tr-sm'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-tl-sm'
+                  : 'bg-gray-100 dark:bg-slateink-800 text-gray-900 dark:text-slate-100 rounded-tl-sm'
               )}>
                 <div className="whitespace-pre-wrap">{message.content}</div>
                 {message.role === 'assistant' && !message.isError && (
@@ -266,7 +266,7 @@ How can I help you today?`,
             className="flex gap-3"
           >
             <Avatar name="AI" size="sm"><Sparkles className="w-4 h-4 text-primary-500" /></Avatar>
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3">
+            <div className="bg-gray-100 dark:bg-slateink-800 rounded-2xl rounded-tl-sm px-4 py-3">
               <div className="flex gap-1">
                 {[1, 2, 3].map((i) => (
                   <motion.div
@@ -285,7 +285,7 @@ How can I help you today?`,
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
+      <div className="p-4 border-t border-gray-200 dark:border-slateink-700 bg-gray-50 dark:bg-slateink-950/60">
         <div className="flex items-end gap-2">
           <Input
             value={input}

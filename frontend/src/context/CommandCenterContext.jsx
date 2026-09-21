@@ -118,13 +118,13 @@ export function CommandCenterProvider({ children }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="w-full max-w-2xl mx-4 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+            className="w-full max-w-2xl mx-4 bg-white dark:bg-slateink-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slateink-700 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative p-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Keyboard className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-slate-500" />
+                <Keyboard className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-slate-500" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -132,14 +132,14 @@ export function CommandCenterProvider({ children }) {
                   onChange={(e) => { setSearchQuery(e.target.value); setSelectedIndex(0); }}
                   onKeyDown={handleKeyDown}
                   placeholder="Search MediVerse... (⌘K to open)"
-                  className="w-full pl-10 pr-12 py-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-12 py-3 bg-gray-100 dark:bg-slateink-800 border border-gray-200 dark:border-slateink-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   autoFocus
                 />
               </div>
             </div>
             <div className="max-h-[50vh] overflow-y-auto">
               {filteredCommands.length > 0 ? (
-                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                <ul className="divide-y divide-gray-200 dark:divide-slateink-700">
                   {filteredCommands.map((cmd, index) => (
                     <motion.li
                       key={cmd.id}
@@ -152,38 +152,38 @@ export function CommandCenterProvider({ children }) {
                         className={cn(
                           'w-full px-4 py-3 flex items-center gap-3 text-left transition-colors',
                           index === selectedIndex
-                            ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                            ? 'bg-primary-50 dark:bg-primary-500/15 text-primary-700 dark:text-primary-400'
+                            : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slateink-800'
                         )}
                       >
                         <div className={cn(
                           'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0',
                           index === selectedIndex
-                            ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                            ? 'bg-primary-100 dark:bg-primary-500/15 text-primary-600 dark:text-primary-400'
+                            : 'bg-gray-100 dark:bg-slateink-800 text-gray-600 dark:text-slate-400'
                         )}>
                           {cmd.icon}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium truncate">{cmd.label}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{cmd.description}</p>
+                          <p className="text-sm text-gray-500 dark:text-slate-400 truncate">{cmd.description}</p>
                         </div>
-                        <span className="text-xs text-gray-400 dark:text-gray-500 font-mono px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">
+                        <span className="text-xs text-gray-400 dark:text-slate-500 font-mono px-2 py-0.5 bg-gray-100 dark:bg-slateink-800 rounded">
                           {cmd.shortcut}
                         </span>
-                        <ChevronRight className={cn('w-4 h-4 flex-shrink-0', index === selectedIndex ? 'text-primary-500' : 'text-gray-400')} />
+                        <ChevronRight className={cn('w-4 h-4 flex-shrink-0', index === selectedIndex ? 'text-primary-500' : 'text-gray-400 dark:text-slate-500')} />
                       </button>
                     </motion.li>
                   ))}
                 </ul>
               ) : (
-                <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                <div className="p-8 text-center text-gray-500 dark:text-slate-400">
                   <Search className="w-10 h-10 mx-auto mb-2 opacity-50" />
                   <p>No commands found</p>
                 </div>
               )}
             </div>
-            <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div className="p-3 border-t border-gray-200 dark:border-slateink-700 flex items-center justify-between text-xs text-gray-500 dark:text-slate-400">
               <span>⌘K to close</span>
               <span>↑↓ to navigate • Enter to select</span>
             </div>

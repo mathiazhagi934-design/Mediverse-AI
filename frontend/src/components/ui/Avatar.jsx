@@ -76,7 +76,7 @@ export function Avatar({
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className={cn('relative inline-flex shrink-0', className)}
     >
-      <div className={cn('relative rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700', sizes[size])}>
+      <div className={cn('relative rounded-full overflow-hidden bg-gray-200 dark:bg-slateink-700', sizes[size])}>
         {src ? (
           <img
             src={src}
@@ -133,7 +133,7 @@ export function AvatarGroup({ avatars = [], max = 5, size = 'md', className = ''
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           className={cn(
-            'relative z-0 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center font-medium text-gray-600 dark:text-gray-400 border-2 border-white dark:border-gray-900',
+            'relative z-0 rounded-full bg-gray-200 dark:bg-slateink-700 flex items-center justify-center font-medium text-gray-600 dark:text-gray-400 border-2 border-white dark:border-slateink-950',
             sizes[size]
           )}
         >

@@ -3,42 +3,121 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-slateink-950 text-slate-100;
+    background-image: radial-gradient(1200px 600px at 100% -10%, rgb(37 99 235 / 0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 0%, rgb(20 184 166 / 0.07), transparent 55%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 {
+    @apply tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-primary-600/40 text-white;
   }
 }
 
 @layer components {
+  /* Primary button */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-500 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slateink-950;
   }
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 bg-slateink-800 hover:bg-slateink-700 text-slate-200 border border-slateink-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-slateink-950;
   }
   .btn-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slateink-950;
   }
   .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all duration-200;
+    @apply w-full px-4 py-2.5 bg-slateink-900 border border-slateink-500 rounded-lg text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all duration-200;
   }
+  .input-field option {
+    @apply bg-slateink-900 text-slate-100;
+  }
+
+  /* Cards */
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    @apply bg-slateink-900 rounded-xl shadow-soft border border-slateink-700 p-6;
   }
   .stat-card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex flex-col;
+    @apply bg-slateink-900 rounded-xl shadow-soft border border-slateink-700 p-5 flex flex-col;
+  }
+
+  /* Section header */
+  .section-title {
+    @apply text-base font-semibold text-slate-100;
+  }
+  .section-subtitle {
+    @apply text-sm text-slate-400;
+  }
+  .section-eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-primary-400;
+  }
+
+  /* Page header */
+  .page-title {
+    @apply text-2xl md:text-[1.7rem] font-bold text-slate-50;
+  }
+  .page-subtitle {
+    @apply text-[15px] text-slate-400 mt-1;
+  }
+
+  /* Professional status dot */
+  .status-dot {
+    @apply inline-block w-2 h-2 rounded-full;
+  }
+
+  /* Skeleton loader */
+  .skeleton {
+    @apply relative overflow-hidden bg-slateink-800 rounded-lg;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.05), transparent);
+  }
+
+  /* Accessibility focus for interactive elements */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-slateink-950;
   }
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-slateink-700 rounded-full border-2 border-slateink-950;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-slateink-600;
+}
+
+/* Recharts clean clinical styling */
+.recharts-cartesian-axis-tick text {
+  @apply fill-slate-400 text-[11px];
+}
+.recharts-cartesian-grid line {
+  @apply stroke-slateink-800;
+}
+.recharts-tooltip-cursor {
+  @apply fill-slate-700/30;
 }

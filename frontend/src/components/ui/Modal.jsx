@@ -85,7 +85,7 @@ export function Modal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className={cn(
-              'relative w-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden',
+              'relative w-full bg-white dark:bg-slateink-900 rounded-2xl shadow-2xl overflow-hidden',
               sizeClasses[size],
               className
             )}
@@ -93,7 +93,7 @@ export function Modal({
             onClick={(e) => e.stopPropagation()}
           >
             {(title || showCloseButton) && (
-              <div className="flex items-start justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-start justify-between p-6 border-b border-gray-200 dark:border-slateink-700">
                 <div>
                   {title && (
                     <motion.h2
@@ -122,7 +122,7 @@ export function Modal({
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={onClose}
-                    className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slateink-800 transition-colors"
                     aria-label="Close modal"
                   >
                     <X className="w-5 h-5" />
@@ -165,7 +165,7 @@ export function ConfirmModal({
         <button
           onClick={onClose}
           disabled={loading}
-          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slateink-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slateink-700 transition-colors disabled:opacity-50"
         >
           {cancelText}
         </button>

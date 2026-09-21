@@ -3,15 +3,15 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('system');
-  const [resolvedTheme, setResolvedTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
+  const [resolvedTheme, setResolvedTheme] = useState('dark');
   const [mounted, setMounted] = useState(false);
 
   const getSystemTheme = useCallback(() => {
     if (typeof window !== 'undefined') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
-    return 'light';
+    return 'dark';
   }, []);
 
   const resolveTheme = useCallback((themeValue) => {
@@ -69,7 +69,7 @@ export function ThemeProvider({ children }) {
 
   if (!mounted) {
     return (
-      <ThemeContext.Provider value={{ theme: 'system', resolvedTheme: 'light', toggleTheme, setThemeMode, mounted: false }}>
+      <ThemeContext.Provider value={{ theme: 'dark', resolvedTheme: 'dark', toggleTheme, setThemeMode, mounted: false }}>
         {children}
       </ThemeContext.Provider>
     );

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/axios';
 import { cn } from '../../utils/cn';
-import { Sun, Moon, Monitor, Bell, Shield, User, Trash2, Download, LogOut, Palette, Lock, Database, Heart, Settings as SettingsIcon, MessageSquare } from 'lucide-react';
+import { Sun, Moon, Monitor, Bell, Shield, User, Trash2, Download, LogOut, Palette, Lock, Database, Heart, Settings as SettingsIcon, MessageSquare, Sparkles } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -26,7 +26,7 @@ const sections = [
 ];
 
 export default function Settings() {
-  const { theme, resolvedTheme, setThemeMode } = useTheme();
+  const { theme, setThemeMode } = useTheme();
   const { notify, types } = useNotifications();
   const { user, logout, setUser } = useAuth();
   const navigate = useNavigate();
@@ -134,93 +134,100 @@ export default function Settings() {
 
   return (
     <div className="space-y-6 max-w-4xl">
+      {/* Toolbar: tabs + save */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row sm:items-center gap-3"
       >
-        <div>
-          <h1 className="text-2xl font-bold">Settings</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your preferences and account</p>
+        <div className="card !p-1.5 flex-1 overflow-x-auto">
+          <nav className="flex min-w-max gap-1" aria-label="Settings sections">
+            {sections.map((section, index) => {
+              const Icon = section.icon;
+              const active = activeSection === section.id;
+              return (
+                <motion.button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={cn(
+                    'flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all',
+                    active
+                      ? 'bg-primary-600 text-white shadow-soft'
+                      : 'text-slate-500 hover:text-slateink-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slateink-950'
+                  )}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{section.label}</span>
+                </motion.button>
+              );
+            })}
+          </nav>
         </div>
-        <Button onClick={handleSavePreferences} loading={loading} rightIcon={<SettingsIcon className="w-4 h-4" />}>
-          Save All
+        <Button onClick={handleSavePreferences} loading={loading} rightIcon={!loading ? <SettingsIcon className="w-4 h-4" /> : undefined} className="shrink-0">
+          {loading ? 'Saving…' : 'Save All'}
         </Button>
       </motion.div>
 
-      {/* Section Navigation */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="card overflow-hidden"
-      >
-        <nav className="flex border-b border-gray-200 dark:border-gray-700" aria-label="Settings sections">
-          {sections.map((section, index) => (
-            <motion.button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              whileHover={{ y: -2 }}
-              className={cn(
-                'flex-1 flex flex-col items-center gap-2 py-4 px-3 text-left transition-colors',
-                activeSection === section.id
-                  ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 border-b-2 border-primary-500'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-              )}
-            >
-              <section.icon className="w-5 h-5" />
-              <span className="font-medium">{section.label}</span>
-              <span className="text-xs text-gray-400 hidden sm:block">{section.description}</span>
-            </motion.button>
-          ))}
-        </nav>
-      </motion.div>
-
-      {/* Appearance Section */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSection}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
+          exit={{ opacity: 0, y: -16 }}
           transition={{ duration: reducedMotion ? 0 : 0.2 }}
         >
           {activeSection === 'appearance' && (
             <div className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Palette className="w-5 h-5" /> Theme</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Palette className="w-5 h-5 text-primary-500" /> Theme</CardTitle>
                   <CardDescription>Choose your preferred color scheme</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
-                      { value: 'light', icon: Sun, label: 'Light', desc: 'Always light mode' },
-                      { value: 'dark', icon: Moon, label: 'Dark', desc: 'Always dark mode' },
-                      { value: 'system', icon: Monitor, label: 'System', desc: 'Match system setting' },
-                    ].map((t) => (
+                      { value: 'light', icon: Sun, label: 'Light', desc: 'Always light mode', preview: 'from-slate-50 to-white' },
+                      { value: 'dark', icon: Moon, label: 'Dark', desc: 'Always dark mode', preview: 'from-slateink-900 to-slateink-950' },
+                      { value: 'system', icon: Monitor, label: 'System', desc: 'Match system setting', preview: 'from-slate-50 to-slateink-900' },
+                    ].map((t, i) => (
                       <motion.button
                         key={t.value}
                         onClick={() => setThemeMode(t.value)}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         className={cn(
-                          'p-4 rounded-xl border-2 text-left transition-all',
+                          'relative p-4 rounded-xl border-2 text-left transition-all overflow-hidden',
                           theme === t.value
                             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            : 'border-slate-200 dark:border-slateink-950 hover:border-slate-300 dark:hover:border-slate-800'
                         )}
                       >
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-2"
-                          style={{ backgroundColor: theme === t.value ? 'var(--primary-100)' : '#f3f4f6' }}>
-                          <t.icon className="w-5 h-5" style={{ color: theme === t.value ? 'var(--primary-600)' : '#9ca3af' }} />
+                        <div className={cn('h-12 rounded-lg bg-gradient-to-br mb-3 border border-white/40', t.preview)} />
+                        <div className="flex items-center gap-2">
+                          <span className={cn(
+                            'w-8 h-8 rounded-lg flex items-center justify-center',
+                            theme === t.value ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slateink-950 text-slate-500'
+                          )}>
+                            <t.icon className="w-4 h-4" />
+                          </span>
+                          <div>
+                            <p className="font-medium text-slateink-900 dark:text-white text-sm">{t.label}</p>
+                            <p className="text-xs text-slate-400">{t.desc}</p>
+                          </div>
                         </div>
-                        <p className="font-medium" style={{ color: theme === t.value ? 'var(--primary-700)' : 'inherit' }}>{t.label}</p>
-                        <p className="text-xs text-gray-500 mt-1">{t.desc}</p>
-                        {theme === t.value && <div className="mt-2 text-primary-500 text-sm">✓ Active</div>}
+                        {theme === t.value && (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="mt-3 text-primary-600 dark:text-primary-400 text-xs font-medium flex items-center gap-1"
+                          >
+                            <Sparkles className="w-3 h-3" /> Active
+                          </motion.div>
+                        )}
                       </motion.button>
                     ))}
                   </div>
@@ -229,14 +236,14 @@ export default function Settings() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><SettingsIcon className="w-5 h-5" /> Interface</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><SettingsIcon className="w-5 h-5 text-primary-500" /> Interface</CardTitle>
                   <CardDescription>Adjust interface preferences</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Reduced Motion</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Disable animations for accessibility</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Reduced Motion</p>
+                      <p className="text-sm text-slate-500">Disable animations for accessibility</p>
                     </div>
                     <Switch
                       checked={reducedMotion || !animationsEnabled}
@@ -244,10 +251,10 @@ export default function Settings() {
                       disabled={reducedMotion}
                     />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Compact Mode</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Reduce spacing for more content</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Compact Mode</p>
+                      <p className="text-sm text-slate-500">Reduce spacing for more content</p>
                     </div>
                     <Switch checked={compactMode} onChange={setCompactMode} />
                   </div>
@@ -260,28 +267,28 @@ export default function Settings() {
             <div className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Bell className="w-5 h-5" /> General</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Bell className="w-5 h-5 text-primary-500" /> General</CardTitle>
                   <CardDescription>Master notification controls</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Enable Notifications</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Receive in-app notifications</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Enable Notifications</p>
+                      <p className="text-sm text-slate-500">Receive in-app notifications</p>
                     </div>
                     <Switch checked={notificationsEnabled} onChange={setNotificationsEnabled} />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Push Notifications</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Browser push notifications</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Push Notifications</p>
+                      <p className="text-sm text-slate-500">Browser push notifications</p>
                     </div>
                     <Switch checked={pushNotifications} onChange={setPushNotifications} disabled={!notificationsEnabled} />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Email Notifications</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Receive email updates</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Email Notifications</p>
+                      <p className="text-sm text-slate-500">Receive email updates</p>
                     </div>
                     <Switch checked={emailNotifications} onChange={setEmailNotifications} disabled={!notificationsEnabled} />
                   </div>
@@ -290,28 +297,28 @@ export default function Settings() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Heart className="w-5 h-5" /> Health Alerts</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Heart className="w-5 h-5 text-primary-500" /> Health Alerts</CardTitle>
                   <CardDescription>Health-related notifications</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Health Reminders</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Daily wellness reminders</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Health Reminders</p>
+                      <p className="text-sm text-slate-500">Daily wellness reminders</p>
                     </div>
                     <Switch checked={healthReminders} onChange={setHealthReminders} disabled={!notificationsEnabled} />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Prediction Alerts</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">High confidence predictions</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Prediction Alerts</p>
+                      <p className="text-sm text-slate-500">High confidence predictions</p>
                     </div>
                     <Switch checked={predictionAlerts} onChange={setPredictionAlerts} disabled={!notificationsEnabled} />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Report Alerts</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Report processing complete</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Report Alerts</p>
+                      <p className="text-sm text-slate-500">Report processing complete</p>
                     </div>
                     <Switch checked={reportAlerts} onChange={setReportAlerts} disabled={!notificationsEnabled} />
                   </div>
@@ -332,14 +339,14 @@ export default function Settings() {
             <div className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Database className="w-5 h-5" /> Your Data</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Database className="w-5 h-5 text-primary-500" /> Your Data</CardTitle>
                   <CardDescription>Manage your personal data</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button variant="outline" leftIcon={<Download className="w-4 h-4" />} onClick={handleExportData}>
                     Export My Data
                   </Button>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-slate-500">
                     Download a copy of all your data including predictions, reports, and profile information.
                   </p>
                 </CardContent>
@@ -347,12 +354,12 @@ export default function Settings() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Lock className="w-5 h-5" /> Data Retention</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Lock className="w-5 h-5 text-primary-500" /> Data Retention</CardTitle>
                   <CardDescription>How long we keep your data</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 dark:text-white mb-2">Data Retention Policy</p>
+                <CardContent className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                  <div className="rounded-lg bg-slate-50 dark:bg-slateink-900/60 border border-slate-100 dark:border-slateink-950 p-4">
+                    <p className="font-medium text-slateink-900 dark:text-white mb-2">Data Retention Policy</p>
                     <ul className="space-y-1 list-disc list-inside">
                       <li>Prediction history: Kept indefinitely unless deleted</li>
                       <li>Medical reports: Kept until manually deleted</li>
@@ -373,7 +380,7 @@ export default function Settings() {
                   <Button variant="danger" onClick={() => setShowDeleteModal(true)} className="w-full">
                     Delete Account
                   </Button>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">
+                  <p className="text-sm text-slate-500 mt-2 text-center">
                     Permanently delete your account and all data. This cannot be undone.
                   </p>
                 </CardContent>
@@ -385,16 +392,16 @@ export default function Settings() {
             <div className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><User className="w-5 h-5" /> Profile Information</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><User className="w-5 h-5 text-primary-500" /> Profile Information</CardTitle>
                   <CardDescription>Your account details</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-4">
                     <Avatar name={user?.username} size="xl" />
                     <div>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">{user?.username}</p>
-                      <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Member since {new Date(user?.date_joined).toLocaleDateString()}</p>
+                      <p className="text-lg font-semibold text-slateink-900 dark:text-white">{user?.username}</p>
+                      <p className="text-slate-500">{user?.email}</p>
+                      <p className="text-xs text-slate-400 mt-1">Member since {user?.date_joined ? new Date(user.date_joined).toLocaleDateString() : '—'}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -407,28 +414,28 @@ export default function Settings() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Shield className="w-5 h-5" /> Security</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-slateink-900 dark:text-white"><Shield className="w-5 h-5 text-primary-500" /> Security</CardTitle>
                   <CardDescription>Account security settings</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slateink-900/60 border border-slate-100 dark:border-slateink-950">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Password</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Last changed: Recently</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Password</p>
+                      <p className="text-sm text-slate-500">Last changed: Recently</p>
                     </div>
                     <Button variant="outline" size="sm">Change Password</Button>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slateink-900/60 border border-slate-100 dark:border-slateink-950">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Two-Factor Authentication</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Add an extra layer of security</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Two-Factor Authentication</p>
+                      <p className="text-sm text-slate-500">Add an extra layer of security</p>
                     </div>
                     <Badge variant="outline">Not Enabled</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slateink-900/60 border border-slate-100 dark:border-slateink-950">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Active Sessions</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">1 active session</p>
+                      <p className="font-medium text-slateink-900 dark:text-white">Active Sessions</p>
+                      <p className="text-sm text-slate-500">1 active session</p>
                     </div>
                     <Button variant="outline" size="sm">View Sessions</Button>
                   </div>

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/axios';
 import { cn } from '../../utils/cn';
-import { Send, Bot, User, Sparkles, Copy, Check, Loader2 } from 'lucide-react';
+import { Send, Bot, Sparkles, Copy } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -101,7 +101,7 @@ How can I help you today?`,
     } catch (err) {
       console.error('AI Assistant error:', err);
       setError('Unable to connect to AI assistant. Please try again later.');
-      
+
       const errorMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -138,12 +138,13 @@ How can I help you today?`,
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-purple-500 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-soft">
             <Bot className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">AI Health Assistant</h1>
-            <p className="text-gray-600 dark:text-gray-400">Your educational health companion</p>
+            <p className="section-eyebrow">AI Companion</p>
+            <h1 className="text-2xl font-bold text-slateink-900 dark:text-white">AI Health Assistant</h1>
+            <p className="text-slate-500 mt-1">Your educational health companion</p>
           </div>
         </div>
         <Alert variant="info" className="text-sm">
@@ -157,11 +158,11 @@ How can I help you today?`,
         transition={{ delay: 0.1 }}
         className="h-[60vh] flex flex-col"
       >
-        <Card className="flex-1 flex flex-col h-full">
-          <CardHeader className="border-b border-gray-200 dark:border-gray-700 pb-3">
+        <Card className="flex-1 flex flex-col h-full !p-0">
+          <CardHeader className="border-b border-slate-200 dark:border-slateink-800 pb-3 bg-slate-50/60 dark:bg-slateink-950/40 rounded-t-2xl">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary-600" />
+                <Sparkles className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 Conversation
               </CardTitle>
               <Badge variant="outline" dot dotColor="bg-green-500">Ready</Badge>
@@ -176,7 +177,7 @@ How can I help you today?`,
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-3"
                   >
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 px-2">Suggested questions:</p>
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 px-2">Suggested questions:</p>
                     <div className="flex flex-wrap gap-2 px-2">
                       {SUGGESTED_PROMPTS.map((prompt, index) => (
                         <motion.button
@@ -187,7 +188,7 @@ How can I help you today?`,
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
-                          className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-left"
+                          className="px-3.5 py-2 text-sm text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slateink-900 rounded-xl hover:bg-primary-50 hover:text-primary-700 dark:hover:bg-primary-950/40 dark:hover:text-primary-300 transition-colors text-left border border-slate-200 dark:border-slateink-800"
                         >
                           {prompt}
                         </motion.button>
@@ -205,32 +206,32 @@ How can I help you today?`,
                     className={cn('flex gap-3 px-4', message.role === 'user' && 'flex-row-reverse')}
                   >
                     <Avatar
-                      name={message.role === 'user' ? user?.username : 'AI'}
+                      name={message.role === 'user' ? user?.username || 'You' : 'AI'}
                       size="sm"
                     >
                       {message.role === 'assistant' && <Sparkles className="w-4 h-4 text-primary-500" />}
                     </Avatar>
                     <div className={cn('max-w-[85%]', message.role === 'user' ? 'text-right' : 'text-left')}>
-                      <div className={cn(
-                        'inline-block px-4 py-2 rounded-2xl text-sm leading-relaxed',
-                        message.role === 'user'
-                          ? 'bg-primary-600 text-white rounded-tr-sm'
-                          : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-tl-sm'
-                      )}>
+                      <div
+                        className={cn(
+                          'inline-block px-4 py-2.5 rounded-2xl text-sm leading-relaxed text-left',
+                          message.role === 'user'
+                            ? 'bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-tr-sm shadow-soft'
+                            : 'bg-slate-100 dark:bg-slateink-900 text-slateink-900 dark:text-white rounded-tl-sm border border-slate-200 dark:border-slateink-800'
+                        )}
+                      >
                         <div className="whitespace-pre-wrap">{message.content}</div>
                         {message.role === 'assistant' && !message.isError && (
-                          <motion.button
+                          <button
                             onClick={() => copyToClipboard(message.content)}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className="absolute -top-6 -right-2 p-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="mt-2 inline-flex items-center gap-1 text-xs text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                             aria-label="Copy message"
                           >
-                            <Copy className="w-3.5 h-3.5" />
-                          </motion.button>
+                            <Copy className="w-3 h-3" /> Copy
+                          </button>
                         )}
                       </div>
-                      <time className="text-xs text-gray-400 dark:text-gray-500 mt-1 block">
+                      <time className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </time>
                     </div>
@@ -245,7 +246,7 @@ How can I help you today?`,
                     className="flex gap-3 px-4"
                   >
                     <Avatar name="AI" size="sm"><Sparkles className="w-4 h-4 text-primary-500" /></Avatar>
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div className="bg-slate-100 dark:bg-slateink-900 rounded-2xl rounded-tl-sm px-4 py-3 border border-slate-200 dark:border-slateink-800">
                       <div className="flex gap-1">
                         {[1, 2, 3].map((i) => (
                           <motion.div
@@ -269,7 +270,7 @@ How can I help you today?`,
                 </Alert>
               )}
 
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-4 border-t border-slate-200 dark:border-slateink-800 bg-slate-50/60 dark:bg-slateink-950/40">
                 <div className="flex items-end gap-2">
                   <Input
                     value={input}
@@ -287,13 +288,13 @@ How can I help you today?`,
                     loading={loading}
                     variant="primary"
                     size="icon"
-                    className="h-10"
+                    className="h-[44px]"
                     aria-label="Send message"
                   >
                     <Send className="w-5 h-5" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-2.5 text-center">
                   AI responses are for educational purposes only. Not medical advice.
                 </p>
               </div>
@@ -306,26 +307,26 @@ How can I help you today?`,
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="card"
+        className="card !p-6"
       >
-        <CardHeader>
+        <CardHeader className="!p-0">
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-purple-600" />
+            <Sparkles className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             Quick Actions
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <Button variant="outline" onClick={() => handleSuggestionClick('Explain my latest prediction')} className="text-left">
+        <CardContent className="!p-0">
+          <div className="grid sm:grid-cols-2 gap-3 mt-4">
+            <Button variant="outline" onClick={() => handleSuggestionClick('Explain my latest prediction')} className="text-left justify-start">
               Latest Prediction
             </Button>
-            <Button variant="outline" onClick={() => handleSuggestionClick('What does my report contain?')} className="text-left">
+            <Button variant="outline" onClick={() => handleSuggestionClick('What does my report contain?')} className="text-left justify-start">
               Report Summary
             </Button>
-            <Button variant="outline" onClick={() => handleSuggestionClick('Explain my health score')} className="text-left">
+            <Button variant="outline" onClick={() => handleSuggestionClick('Explain my health score')} className="text-left justify-start">
               Health Score
             </Button>
-            <Button variant="outline" onClick={() => handleSuggestionClick('What should I discuss with my doctor?')} className="text-left">
+            <Button variant="outline" onClick={() => handleSuggestionClick('What should I discuss with my doctor?')} className="text-left justify-start">
               Doctor Discussion
             </Button>
           </div>

@@ -11,11 +11,11 @@ export function Card({
   ...props
 }) {
   const variants = {
-    default: 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700',
-    elevated: 'bg-white dark:bg-gray-900 shadow-lg border-none',
-    outlined: 'bg-transparent border-2 border-gray-200 dark:border-gray-700',
-    glass: 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border border-white/20 dark:border-gray-700/50',
-    gradient: 'bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 border border-primary-200 dark:border-primary-800',
+    default: 'bg-white dark:bg-slateink-900 border border-gray-200 dark:border-slateink-700',
+    elevated: 'bg-white dark:bg-slateink-800 shadow-lg border-none',
+    outlined: 'bg-transparent border-2 border-gray-200 dark:border-slateink-700',
+    glass: 'bg-white/80 dark:bg-slateink-900/80 backdrop-blur-md border border-white/20 dark:border-slateink-700/50',
+    gradient: 'bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/60 dark:to-slateink-900 border border-primary-200 dark:border-primary-800',
   };
 
   const cardVariants = {
@@ -87,7 +87,7 @@ export function CardContent({ children, className = '', ...props }) {
 
 export function CardFooter({ children, className = '', ...props }) {
   return (
-    <div className={cn('mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2', className)} {...props}>
+    <div className={cn('mt-4 pt-4 border-t border-gray-200 dark:border-slateink-700 flex items-center gap-2', className)} {...props}>
       {children}
     </div>
   );

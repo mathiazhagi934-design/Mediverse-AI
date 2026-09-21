@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api/axios';
-import { Scan, Upload, AlertTriangle, Loader2, Info, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { Scan, Loader2, Info, Image as ImageIcon, CheckCircle, ShieldCheck, FileImage } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Button } from '../components/ui/Button';
+import { ConfidenceBadge } from '../components/ui/Badge';
+import EmptyState from '../components/EmptyState';
+import MedicalDisclaimer from '../components/MedicalDisclaimer';
 
 export default function SkinDetection() {
   const [preview, setPreview] = useState(null);
@@ -61,128 +66,191 @@ export default function SkinDetection() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="text-2xl font-bold">Skin Disease Detection</h1>
-        <p className="text-gray-600 mt-1">Upload a skin image for AI-powered analysis</p>
-      </div>
-
       {/* Upload & Preview */}
-      <div className="card">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="card !p-5 sm:!p-6"
+      >
         <div className="grid sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Select Image</label>
-            <label className={`block border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary-400 transition-colors ${preview ? '' : 'min-h-[200px]'}`}>
+            <label className="block text-sm font-semibold text-slateink-900 dark:text-white mb-2">Dermatology Image</label>
+            <label
+              className={`block border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all overflow-hidden ${
+                preview
+                  ? 'border-primary-300 dark:border-primary-700 bg-primary-50/40 dark:bg-primary-900/10'
+                  : 'border-slate-300 dark:border-slate-600 hover:border-primary-400 bg-slate-50 dark:bg-slateink-900/50'
+              }`}
+            >
               {preview ? (
-                <img src={preview} alt="Preview" className="max-h-64 mx-auto rounded-lg" />
+                <motion.img
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  src={preview}
+                  alt="Preview"
+                  className="max-h-72 mx-auto rounded-lg shadow-soft"
+                />
               ) : (
-                <div className="space-y-2">
-                  <ImageIcon className="w-8 h-8 text-gray-400 mx-auto" />
-                  <p className="text-sm text-gray-500">Click to select an image</p>
-                  <p className="text-xs text-gray-400">JPEG, PNG, or WebP (max 5MB)</p>
+                <div className="space-y-3 py-8">
+                  <span className="w-14 h-14 rounded-2xl bg-white dark:bg-slateink-900 border border-slate-200 dark:border-slateink-950 mx-auto flex items-center justify-center shadow-soft">
+                    <FileImage className="w-7 h-7 text-primary-500" />
+                  </span>
+                  <p className="text-sm font-medium text-slateink-900 dark:text-white">Click to select an image</p>
+                  <p className="text-xs text-slate-400">JPEG, PNG, or WebP (max 5MB)</p>
                 </div>
               )}
               <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileSelect} />
             </label>
-          </div>
-          <div className="flex flex-col justify-center">
-            <button onClick={handlePredict} disabled={loading || !file} className="btn-primary inline-flex items-center gap-2 w-full sm:w-auto">
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
-              {loading ? 'Analyzing...' : 'Analyze Image'}
-            </button>
-
-            {result && (
-              <div className="mt-4 space-y-3">
-                {result.is_model_available ? (
-                  <div className="bg-primary-50 border border-primary-200 rounded-xl p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <CheckCircle className="w-5 h-5 text-primary-600" />
-                      <p className="text-sm font-medium text-primary-600">Detection Result</p>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-primary-500 font-medium">Prediction</p>
-                        <p className="text-xl font-bold text-primary-800 mt-1">{result.prediction}</p>
-                      </div>
-                      {result.confidence > 0 && (
-                        <div>
-                          <p className="text-xs text-primary-500 font-medium">Confidence</p>
-                          <p className="text-xl font-bold text-primary-800 mt-1">{(result.confidence * 100).toFixed(1)}%</p>
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-xs text-primary-600 mt-3">
-                      The model estimates this condition based on the uploaded image. 
-                      This is not a medical diagnosis.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-                    <div className="flex items-start gap-3">
-                      <Info className="w-6 h-6 text-blue-600 mt-0.5 shrink-0" />
-                      <div className="flex-1">
-                        <h3 className="font-medium text-blue-800 mb-1">Model Not Configured</h3>
-                        <p className="text-sm text-blue-700 mb-2">{result.message}</p>
-                        <div className="bg-blue-100 rounded-lg p-3 text-xs text-blue-800">
-                          <p className="font-medium mb-1">To enable skin disease detection:</p>
-                          <ol className="list-decimal list-inside space-y-1">
-                            <li>Obtain a trained skin disease classification model (e.g., HAM10000 dataset)</li>
-                            <li>Save as <code className="bg-blue-200 px-1 rounded">skin_model.h5</code> in <code className="bg-blue-200 px-1 rounded">backend/trained_models/</code></li>
-                            <li>Ensure class mapping matches the 8 skin disease categories</li>
-                          </ol>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {result.disclaimer && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-                    <p className="text-xs text-amber-700">{result.disclaimer}</p>
-                  </div>
-                )}
-              </div>
+            {preview && (
+              <p className="text-xs text-slate-400 mt-2 flex items-center gap-1.5">
+                <Scan className="w-3.5 h-3.5" /> Review the selected image, then run the analysis.
+              </p>
             )}
           </div>
+
+          <div className="flex flex-col justify-center">
+            <Button
+              onClick={handlePredict}
+              disabled={loading || !file}
+              loading={loading}
+              size="lg"
+              leftIcon={!loading ? <Scan className="w-4 h-4" /> : undefined}
+              className="w-full sm:w-auto"
+            >
+              {loading ? 'Analyzing Image…' : 'Run Skin Analysis'}
+            </Button>
+
+            <div className="mt-4 flex items-start gap-2 text-xs text-slate-400">
+              <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0 text-teal-500" />
+              <p>Images are processed securely. Detection is educational and not a diagnosis.</p>
+            </div>
+
+            <AnimatePresence>
+              {result && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  className="mt-5 space-y-3"
+                >
+                  {result.is_model_available ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="rounded-xl2 border border-primary-200 dark:border-primary-800 bg-gradient-to-br from-primary-50 to-white dark:from-primary-900/20 dark:to-slateink-900 p-6"
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="w-9 h-9 rounded-xl bg-primary-600 text-white flex items-center justify-center shadow-soft">
+                          <CheckCircle className="w-5 h-5" />
+                        </span>
+                        <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">Detection Result</p>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-primary-500 font-medium">Prediction</p>
+                          <p className="text-2xl font-bold text-primary-800 dark:text-primary-200 mt-1 capitalize">{result.prediction.replace(/_/g, ' ')}</p>
+                        </div>
+                        {result.confidence > 0 && (
+                          <div>
+                            <p className="text-xs text-primary-500 font-medium mb-1.5">Confidence</p>
+                            <ConfidenceBadge confidence={result.confidence} />
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-primary-600/80 dark:text-primary-400/80 mt-4">
+                        The model estimates this condition based on the uploaded image. This is not a medical diagnosis.
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <div className="rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 p-5">
+                      <div className="flex items-start gap-3">
+                        <span className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-soft">
+                          <Info className="w-5 h-5" />
+                        </span>
+                        <div className="flex-1">
+                          <h3 className="font-medium text-sky-800 dark:text-sky-300 mb-1">Model Not Configured</h3>
+                          <p className="text-sm text-sky-700 dark:text-sky-400 mb-2">{result.message}</p>
+                          <div className="bg-white/70 dark:bg-slateink-900/40 rounded-lg p-3 text-xs text-sky-800 dark:text-sky-300 border border-sky-100 dark:border-sky-900">
+                            <p className="font-medium mb-1">To enable skin disease detection:</p>
+                            <ol className="list-decimal list-inside space-y-1">
+                              <li>Obtain a trained skin disease classification model (e.g., HAM10000 dataset)</li>
+                              <li>Save as <code className="bg-sky-100 dark:bg-sky-900 px-1 rounded">skin_model.h5</code> in <code className="bg-sky-100 dark:bg-sky-900 px-1 rounded">backend/trained_models/</code></li>
+                              <li>Ensure class mapping matches the 8 skin disease categories</li>
+                            </ol>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {result.disclaimer && (
+                    <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-3 flex items-start gap-2">
+                      <ShieldCheck className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-amber-700 dark:text-amber-400">{result.disclaimer}</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* History */}
       {!historyLoading && history.length > 0 && (
-        <div className="card">
-          <h2 className="font-semibold mb-3">Scan History</h2>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="card !p-5 sm:!p-6"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-500/15 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+              <Scan className="w-4 h-4" />
+            </span>
+            <div>
+              <h3 className="section-title">Scan History</h3>
+              <p className="text-xs text-slate-400">Recent skin analyses</p>
+            </div>
+          </div>
           <div className="space-y-2">
-            {history.slice(0, 10).map(p => (
-              <div key={p.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="text-sm font-medium">{p.prediction || 'No prediction (model unavailable)'}</p>
-                  <p className="text-xs text-gray-500">{new Date(p.created_at).toLocaleString()}</p>
-                </div>
-                {p.confidence > 0 && (
-                  <span className="text-xs font-medium bg-primary-100 text-primary-700 px-2 py-1 rounded-full">
-                    {(p.confidence * 100).toFixed(1)}%
+            {history.slice(0, 10).map((p, i) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04 }}
+                className="flex items-center justify-between gap-3 rounded-lg border border-slate-100 dark:border-slateink-950 bg-slate-50/60 dark:bg-slateink-800/50 p-3"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="w-9 h-9 rounded-lg bg-white dark:bg-slateink-800 border border-slate-200 dark:border-slateink-950 text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0">
+                    <ImageIcon className="w-4 h-4" />
                   </span>
-                )}
-              </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-slateink-900 dark:text-white capitalize truncate">
+                      {p.prediction?.replace(/_/g, ' ') || 'No prediction (model unavailable)'}
+                    </p>
+                    <p className="text-xs text-slate-400">{new Date(p.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+                {p.confidence > 0 && <ConfidenceBadge confidence={p.confidence} />}
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {(!historyLoading && history.length === 0 && !result) && (
-        <div className="card text-center py-8">
-          <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No scans yet. Upload an image to get started.</p>
+        <div className="card">
+          <EmptyState
+            icon={ImageIcon}
+            title="No scans yet"
+            description="Upload a skin image to receive an AI-assisted dermatology screening."
+          />
         </div>
       )}
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-        <p className="text-sm text-amber-700">
-          MediVerse AI provides AI-generated health information for educational purposes only and 
-          is not a substitute for professional medical advice. Always consult a dermatologist for 
-          proper diagnosis of skin conditions.
-        </p>
-      </div>
+      <MedicalDisclaimer>
+        MediVerse AI provides AI-generated health information for educational purposes only and is not a substitute for professional medical advice. Always consult a dermatologist for proper diagnosis of skin conditions.
+      </MedicalDisclaimer>
     </div>
   );
 }

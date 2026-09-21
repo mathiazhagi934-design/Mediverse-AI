@@ -34,13 +34,13 @@ export function Switch({
         <motion.span
           initial={false}
           animate={{
-            backgroundColor: checked ? '#338bff' : '#d1d5db',
-            boxShadow: checked ? '0 0 0 2px rgba(51, 139, 255, 0.3)' : 'none',
+            backgroundColor: checked ? '#2563eb' : '#475569',
+            boxShadow: checked ? '0 0 0 2px rgba(37, 99, 235, 0.3)' : 'none',
           }}
           transition={{ duration: reducedMotion ? 0 : 0.2 }}
           className={cn(
             'w-11 h-6 rounded-full transition-all duration-200',
-            'dark:bg-gray-600 dark:hover:bg-gray-500',
+            'dark:bg-slateink-700 dark:hover:bg-slateink-600',
             checked && 'bg-primary-600',
             disabled && 'opacity-50'
           )}

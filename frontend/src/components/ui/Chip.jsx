@@ -14,10 +14,10 @@ export function Chip({
   animated = true,
 }) {
   const variants = {
-    default: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700',
-    primary: 'bg-primary-100 text-primary-700 hover:bg-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:hover:bg-primary-900/50',
-    success: 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800 bg-transparent',
+    default: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slateink-800 dark:text-gray-300 dark:hover:bg-slateink-700',
+    primary: 'bg-primary-100 text-primary-700 hover:bg-primary-200 dark:bg-primary-500/15 dark:text-primary-300 dark:hover:bg-primary-500/25',
+    success: 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-500/15 dark:text-green-300 dark:hover:bg-green-500/25',
+    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-slateink-600 dark:text-gray-300 dark:hover:bg-slateink-800 bg-transparent',
   };
 
   return (
@@ -32,7 +32,7 @@ export function Chip({
         'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
         variants[variant],
-        selected && 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20',
+        selected && 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-500/10',
         className
       )}
       disabled={!onClick && !onRemove}
@@ -73,7 +73,7 @@ export function FilterChip({ label, count, onClick, active = false, className = 
           animate={{ scale: 1 }}
           className={cn(
             'ml-1 px-1.5 py-0.5 rounded-full text-xs font-medium',
-            active ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+            active ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600 dark:bg-slateink-700 dark:text-gray-300'
           )}
         >
           {count}

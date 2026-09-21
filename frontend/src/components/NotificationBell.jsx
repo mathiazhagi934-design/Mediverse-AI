@@ -72,7 +72,7 @@ export default function NotificationBell() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         className={cn(
-          'relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
+          'relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-slateink-800 transition-colors',
           unreadCount > 0 && 'text-primary-600 dark:text-primary-400'
         )}
         aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
@@ -96,10 +96,10 @@ export default function NotificationBell() {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white dark:bg-slateink-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slateink-700 overflow-hidden z-50"
             role="menu"
           >
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slateink-700">
               <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
@@ -131,7 +131,7 @@ export default function NotificationBell() {
                   <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">No new notifications</p>
                 </div>
               ) : (
-                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                <ul className="divide-y divide-gray-200 dark:divide-slateink-800">
                   {notifications.slice(0, 20).map((notification, index) => (
                     <motion.li
                       key={notification.id}
@@ -139,8 +139,8 @@ export default function NotificationBell() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.03 }}
                       className={cn(
-                        'p-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors',
-                        !notification.read && 'bg-primary-50/50 dark:bg-primary-900/10'
+                        'p-3 hover:bg-gray-50 dark:hover:bg-slateink-800/50 transition-colors',
+                        !notification.read && 'bg-primary-50/50 dark:bg-primary-500/10'
                       )}
                       role="menuitem"
                     >
@@ -148,7 +148,7 @@ export default function NotificationBell() {
                         onClick={() => handleNotificationClick(notification)}
                         className="w-full flex items-start gap-3 text-left"
                       >
-                        <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5', !notification.read ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-gray-100 dark:bg-gray-800')}>
+                        <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5', !notification.read ? 'bg-primary-100 dark:bg-primary-500/20' : 'bg-gray-100 dark:bg-slateink-800')}>
                           {getNotificationIcon(notification.type)}
                         </div>
                         <div className="flex-1 min-w-0">

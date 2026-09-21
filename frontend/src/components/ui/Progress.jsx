@@ -33,7 +33,7 @@ export function Progress({
       )}
       <div
         className={cn(
-          'relative h-full rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700',
+          'relative h-full rounded-full overflow-hidden bg-gray-200 dark:bg-slateink-700',
           height === 6 && 'h-1.5',
           height === 8 && 'h-2',
           height === 12 && 'h-3',
@@ -88,12 +88,12 @@ export function CircularProgress({
   };
 
   const trackColors = {
-    default: 'text-primary-100 dark:text-primary-900/30',
-    success: 'text-green-100 dark:text-green-900/30',
-    warning: 'text-yellow-100 dark:text-yellow-900/30',
-    error: 'text-red-100 dark:text-red-900/30',
-    info: 'text-blue-100 dark:text-blue-900/30',
-    purple: 'text-purple-100 dark:text-purple-900/30',
+    default: 'text-primary-100 dark:text-primary-500/15',
+    success: 'text-green-100 dark:text-green-500/15',
+    warning: 'text-yellow-100 dark:text-amber-500/15',
+    error: 'text-red-100 dark:text-red-500/15',
+    info: 'text-blue-100 dark:text-blue-500/15',
+    purple: 'text-purple-100 dark:text-purple-500/15',
   };
 
   return (
@@ -129,7 +129,7 @@ export function CircularProgress({
             initial={animated ? { opacity: 0, scale: 0.5 } : undefined}
             animate={animated ? { opacity: 1, scale: 1 } : undefined}
             transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
-            className="text-2xl font-bold text-gray-900 dark:text-white tabular-nums"
+            className="text-2xl font-bold text-gray-900 dark:text-slate-50 tabular-nums"
           >
             {Math.round(percentage)}%
           </motion.span>
@@ -142,8 +142,8 @@ export function CircularProgress({
 
 export function StepProgress({ steps, currentStep, className = '', variant = 'default' }) {
   const variants = {
-    default: { active: 'bg-primary-600', completed: 'bg-primary-600', inactive: 'bg-gray-300 dark:bg-gray-600' },
-    success: { active: 'bg-green-600', completed: 'bg-green-600', inactive: 'bg-gray-300 dark:bg-gray-600' },
+    default: { active: 'bg-primary-600', completed: 'bg-primary-600', inactive: 'bg-gray-300 dark:bg-slateink-700' },
+    success: { active: 'bg-green-600', completed: 'bg-green-600', inactive: 'bg-gray-300 dark:bg-slateink-700' },
   };
 
   const colors = variants[variant];
