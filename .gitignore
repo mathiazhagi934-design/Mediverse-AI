@@ -39,11 +39,10 @@ Thumbs.db
 *.hdf5
 datasets/
 *.parquet
+*.joblib
 
-# Allow trained model files
-!backend/trained_models/
-!backend/trained_models/*.pkl
-!backend/trained_models/*.joblib
+# Trained model artifacts (too large for GitHub; regenerate via training)
+backend/trained_models/
 
 # Logs
 *.log
