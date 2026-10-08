@@ -53,3 +53,5 @@ frontend/dist/
 
 # Uploads
 backend/media/uploads/
+
+backend/db.sqlite3
